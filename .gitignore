@@ -1,0 +1,23 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Audio files (optional - uncomment if you don't want to track audio)
+# audios-backlog/*.m4a
+# audio-pending/*.m4a
+# audios-complete/**/*.m4a
