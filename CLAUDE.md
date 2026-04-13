@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Audio transcription automation tool that processes audio files using OpenAI's Whisper API (`gpt-4o-transcribe` model). Batch processes audio files and generates markdown documentation of transcriptions.
+Audio/video transcription tool that downloads media from public URLs and transcribes using OpenAI's Whisper API (`gpt-4o-transcribe` model). Single-command interface.
 
 ## Development Commands
 
@@ -17,25 +17,34 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Configure environment (requires OpenAI API key)
-cp .env.example .env
+# Add OPENAI_API_KEY to .env file
 
-# Run transcription pipeline
-python3 transcribe.py
+# Transcribe audio from URL
+python3 transcribe.py --audio <url>
+
+# Transcribe video from URL (downloads video, extracts audio, transcribes)
+python3 transcribe.py --video <url>
 ```
 
 ## Architecture
 
-### Three-Stage Pipeline
-Files flow through directories in sequence:
-1. **audios-backlog/** - Drop audio files here for processing
-2. **audio-pending/** - Files being actively transcribed (prevents duplicates)
-3. **audios-complete/** - Output directory with `{basename}/` folders containing transcription markdown and original audio
+### Single Script
+- **transcribe.py** - Único punto de entrada. Descarga media con `yt-dlp`, extrae audio con `pydub`, auto-split si >25MB, transcribe con OpenAI API, genera markdown.
 
-### Core Files
-- **config.py** - Centralized configuration: directory paths, supported formats (`.m4a`, `.mp3`, `.mp4`, `.mpeg`, `.mpga`, `.wav`, `.webm`), 25MB size limit, model selection
-- **transcribe.py** - Main entry point with workflow: validate → move to pending → API call → generate markdown → move to complete (returns to backlog on failure)
+### Flags
+- `--audio URL` - Descarga audio directamente y transcribe
+- `--video URL` - Descarga video, extrae audio MP3, transcribe
+
+### Output Structure
+```
+output/{nombre}/
+  {nombre}.mp4    # solo si --video
+  {nombre}.mp3    # audio
+  {nombre}.md     # transcripcion
+```
 
 ### Key Behaviors
-- Files return to backlog on API failures for retry
-- Pre-validates format and file size before API calls
-- Generated markdown includes timestamp, model used, and transcription text
+- Auto-splits audio >25MB into parts, transcribes each, concatenates into single markdown
+- Downloads to temp directory, only final files go to output/
+- Supports any platform that yt-dlp supports (YouTube, TikTok, Instagram, Twitter/X, etc.)
+- Requires `ffmpeg` system dependency
