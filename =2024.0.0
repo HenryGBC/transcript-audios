@@ -1,0 +1,10 @@
+Collecting yt-dlp
+  Downloading yt_dlp-2026.3.17-py3-none-any.whl.metadata (182 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 182.3/182.3 kB 3.5 MB/s eta 0:00:00
+Downloading yt_dlp-2026.3.17-py3-none-any.whl (3.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 35.3 MB/s eta 0:00:00
+Installing collected packages: yt-dlp
+Successfully installed yt-dlp-2026.3.17
+
+[notice] A new release of pip is available: 24.0 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip
